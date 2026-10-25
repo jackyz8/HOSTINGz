@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080912">
+<title>RAYZO • Bot Control</title>
+<style>
+:root{color-scheme:dark;--bg:#080912;--panel:#101322;--panel2:#151a2d;--line:#272e49;--text:#f4f5ff;--muted:#a4acc7;--purple:#a855f7;--blue:#4f7cff;--red:#ff5377;--green:#37d99a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#26134a 0,transparent 40%),radial-gradient(ellipse at 100% 10%,#111f4a 0,transparent 34%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+main{max-width:1050px;margin:auto;padding:26px 16px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--purple),var(--blue));display:grid;place-items:center;font-weight:900;font-size:21px;box-shadow:0 0 35px #8b5cf655}.brand h1{font-size:18px;margin:0;letter-spacing:.09em}.brand p{margin:1px 0 0;color:var(--muted);font-size:12px}.pill{border:1px solid var(--line);background:#101322cc;border-radius:999px;padding:8px 12px;color:var(--muted);font-size:12px;display:flex;align-items:center;gap:7px}.dot{width:7px;height:7px;background:#747b91;border-radius:50%}.dot.on{background:var(--green);box-shadow:0 0 10px #37d99a99}
+.hero{padding:24px;border:1px solid #343253;border-radius:24px;background:linear-gradient(130deg,#17152aee,#10172bea);margin-bottom:18px;box-shadow:0 18px 55px #0003}.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#c4a5fd;font-weight:800}.hero h2{font-size:clamp(25px,5vw,38px);line-height:1.1;margin:10px 0}.hero p{margin:0;color:var(--muted);max-width:680px}.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px}.card{border:1px solid var(--line);border-radius:20px;background:#0f1220ed;padding:20px;min-width:0}.card h3{font-size:16px;margin:0 0 5px}.sub{font-size:12px;color:var(--muted);margin:0 0 18px}.field{margin:14px 0}.field label{display:block;font-size:12px;font-weight:700;color:#c9cee2;margin-bottom:7px}.field input{width:100%;background:#090c17;border:1px solid #303751;border-radius:12px;padding:13px 14px;color:white;outline:none;font:inherit}.field input:focus{border-color:#9b69ff;box-shadow:0 0 0 3px #8b5cf622}.hint{font-size:11px;color:#858eac;margin-top:6px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:800;font-size:13px;cursor:pointer;color:white;transition:transform .15s,opacity .15s}.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:wait;transform:none}.primary{background:linear-gradient(110deg,#9333ea,#4f7cff);box-shadow:0 7px 22px #7845e833}.danger{background:#421d2b;border:1px solid #713044;color:#ff9bb0}.ghost{background:#191e31;border:1px solid #303751}.statusrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;background:#090c17;border:1px solid #272e49;border-radius:14px}.state{font-weight:800;display:flex;align-items:center;gap:9px}.state small{display:block;color:var(--muted);font-weight:400;font-size:11px}.statusbadge{font-size:11px;border-radius:8px;padding:5px 9px;background:#282d40;color:#bdc5dd}.statusbadge.running{background:#103629;color:#67efb7}.loghead{display:flex;justify-content:space-between;align-items:center;margin:19px 0 9px}.loghead h4{font-size:13px;margin:0}.logs{white-space:pre-wrap;overflow:auto;min-height:260px;max-height:440px;background:#070910;border:1px solid #252b40;border-radius:12px;padding:13px;color:#a6e7c7;font:11px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere}.notice{margin-top:16px;border:1px solid #5d4827;background:#241d10;color:#f5dca4;border-radius:13px;padding:12px 14px;font-size:12px}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);max-width:calc(100% - 24px);padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:#171b2b;box-shadow:0 12px 40px #0008;display:none;z-index:5}.footer{text-align:center;color:#6e7694;font-size:11px;margin-top:20px}
+@media(max-width:760px){main{padding:18px 12px 40px}.grid{grid-template-columns:1fr}.hero{padding:20px}.card{padding:16px}.top{align-items:flex-start}.pill{font-size:11px}.logs{min-height:230px}}
+</style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div class="brand"><div class="logo">R</div><div><h1>RAYZO CONTROL</h1><p>Telegram bot manager</p></div></div>
+    <div class="pill"><span id="healthDot" class="dot"></span><span id="apiLabel">Backend not connected</span></div>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">Private control panel</div>
+    <h2>Run your bot.<br>Watch it live.</h2>
+    <p>Enter your BotFather token and Telegram admin ID, then start your existing Python bot from this dashboard.</p>
+  </section>
+  <div class="grid">
+    <section class="card">
+      <h3>Connection & credentials</h3><p class="sub">Credentials are sent directly to your backend over HTTPS and are not saved in this browser.</p>
+      <div class="field"><label for="api">Backend API URL</label><input id="api" type="url" placeholder="https://your-backend.example.com" autocomplete="url"><div class="hint">Paste the URL of your separate Python backend, not your Netlify site.</div></div>
+      <div class="field"><label for="password">Panel password</label><input id="password" type="password" placeholder="Backend PANEL_PASSWORD" autocomplete="current-password"></div>
+      <div class="field"><label for="token">Telegram bot token</label><input id="token" type="password" placeholder="123456789:AA..." autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="admins">Telegram admin ID(s)</label><input id="admins" type="text" inputmode="numeric" placeholder="123456789 or 123456789,987654321" autocomplete="off"><div class="hint">Numeric Telegram user IDs only. Multiple IDs: separate with commas.</div></div>
+      <div class="actions"><button class="btn primary" id="startBtn" onclick="startBot()">▶ Start bot</button><button class="btn danger" id="stopBtn" onclick="stopBot()">■ Stop bot</button></div>
+      <div class="notice"><b>Security:</b> Process mode does not isolate uploaded code. Only use this panel for trusted users; keep the backend password private and enable HTTPS.</div>
+    </section>
+    <section class="card">
+      <h3>Bot status</h3><p class="sub">Status is checked against the Python process running on your backend host.</p>
+      <div class="statusrow"><div class="state"><span id="stateDot" class="dot"></span><div><span id="stateText">Unknown</span><small id="stateDetail">Connect to backend to check status</small></div></div><span class="statusbadge" id="stateBadge">WAITING</span></div>
+      <div class="loghead"><h4>Live logs</h4><button class="btn ghost" style="padding:7px 10px" onclick="refreshAll()">↻ Refresh</button></div>
+      <pre class="logs" id="logs">Set the backend URL and panel password, then click Refresh.</pre>
+      <div class="hint">Logs auto-refresh every 4 seconds. Bot token is masked if it appears in the log output.</div>
+    </section>
+  </div>
+  <div class="footer">RAYZO CONTROL • Frontend on Netlify • Python bot on a separate backend</div>
+</main>
+<div id="toast" class="toast"></div>
+<script>
+const $ = id => document.getElementById(id);
+let secret = "";
+function apiBase(){return $("api").value.trim().replace(/\/+$/,"")}
+function headers(){return {"Content-Type":"application/json","Authorization":"Bearer "+$("password").value}}
+function toast(msg){const t=$("toast");t.textContent=msg;t.style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display="none",4200)}
+async function request(path, options={}) {
+  const base=apiBase(); if(!base) throw new Error("Enter your backend API URL first.");
+  const response=await fetch(base+path,{...options,headers:{...headers(),...(options.headers||{})}});
+  let data={};try{data=await response.json()}catch{}
+  if(!response.ok)throw new Error(data.error||("Request failed ("+response.status+")"));
+  return data;
+}
+async function refreshAll(){
+  try{
+    const s=await request("/api/status");
+    $("healthDot").className="dot on";$("apiLabel").textContent="Backend connected";
+    $("stateDot").className="dot "+(s.running?"on":"");$("stateText").textContent=s.running?"Bot running":"Bot stopped";
+    $("stateDetail").textContent=s.pid?"Process ID: "+s.pid:"No active bot process";
+    $("stateBadge").className="statusbadge "+(s.running?"running":"");$("stateBadge").textContent=s.running?"RUNNING":"STOPPED";
+    const l=await request("/api/logs");$("logs").textContent=l.logs||"No logs yet."; $("logs").scrollTop=$("logs").scrollHeight;
+  }catch(e){$("healthDot").className="dot";$("apiLabel").textContent="Backend not connected";$("stateDot").className="dot";$("stateText").textContent="Connection unavailable";$("stateDetail").textContent=e.message;$("stateBadge").className="statusbadge";$("stateBadge").textContent="OFFLINE";$("logs").textContent="Could not connect to backend.\n"+e.message+"\n\nCheck API URL, panel password, HTTPS and FRONTEND_ORIGIN on the backend."}
+}
+async function startBot(){
+  const b=$("startBtn");b.disabled=true;
+  try{
+    const result=await request("/api/start",{method:"POST",body:JSON.stringify({bot_token:$("token").value.trim(),admin_ids:$("admins").value.trim()})});
+    toast(result.message||"Start request accepted.");$("token").value="";await refreshAll();
+  }catch(e){toast(e.message);await refreshAll()}finally{b.disabled=false}
+}
+async function stopBot(){
+  if(!confirm("Stop the Telegram bot process?"))return;
+  const b=$("stopBtn");b.disabled=true;
+  try{const result=await request("/api/stop",{method:"POST",body:"{}"});toast(result.message||"Stop requested.");await refreshAll()}
+  catch(e){toast(e.message)}finally{b.disabled=false}
+}
+$("api").value=sessionStorage.getItem("rayzo_api_url")||"";
+$("api").addEventListener("change",()=>{sessionStorage.setItem("rayzo_api_url",apiBase());refreshAll()});
+setInterval(()=>{if(apiBase()&&$("password").value)refreshAll()},4000);
+</script>
+</body>
+</html>

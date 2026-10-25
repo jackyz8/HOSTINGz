@@ -1,0 +1,5 @@
+Flask>=3.0,<4
+gunicorn>=22,<24
+cryptography>=42
+psutil>=5.9
+python-telegram-bot>=21,<23
